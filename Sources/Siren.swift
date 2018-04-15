@@ -102,7 +102,23 @@ public final class Siren: NSObject {
 
     /// Type of the available update
     fileprivate var updateType: UpdateType = .unknown
-
+    
+    /// the url to update the application
+    /// for app US app store it is "https://itunes.apple.com/app/id\(appID)"
+    public static var appDownloadURL: String?
+    
+    /// the scheme to check if app is updated or not
+    /// most the cases it is "https" or "http"
+    public static var updateCheckScheme: String?
+    
+    /// the host name to check if app is updated or not
+    /// for us app store it is "itunes.apple.com"
+    public static var updateCheckHost: String?
+    
+    /// the path to check if app is updated or not
+    /// for US app store it is "/lookup"
+    public static var updateCheckPath: String?
+    
     /// The App's Singleton
     public static let shared = Siren()
 
@@ -149,7 +165,7 @@ public final class Siren: NSObject {
     /// - Developer built a custom alert modal and needs to be able to call this function when the user chooses to update the app in the aforementioned custom modal.
     public func launchAppStore() {
         guard let appID = appID,
-            let url = URL(string: "https://itunes.apple.com/app/id\(appID)") else {
+            let url = URL(string: "\(Siren.appDownloadURL!)?\(appID)") else {
                 return
         }
 
@@ -246,10 +262,14 @@ private extension Siren {
 
     func iTunesURLFromString() throws -> URL {
         var components = URLComponents()
-        components.scheme = "https"
-        components.host = "itunes.apple.com"
-        components.path = "/lookup"
+//        components.scheme = "https"
+//        components.host = "itunes.apple.com"
+//        components.path = "/lookup"
 
+        components.scheme = Siren.updateCheckScheme
+        components.host = Siren.updateCheckHost
+        components.path = Siren.updateCheckPath!
+        
         var items: [URLQueryItem] = [URLQueryItem(name: "bundleId", value: Bundle.bundleID())]
 
         if let countryCode = countryCode {
