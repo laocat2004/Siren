@@ -63,6 +63,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Optional (Only do this if you don't call checkVersion in didBecomeActive)
 //        siren.checkVersion(checkType: .immediately)
+        
+        Siren.appDownloadURL = "https://itunes.apple.com/app/id"
+        
+        Siren.updateCheckScheme = "https"
+        Siren.updateCheckHost = "itunes.apple.com"
+        Siren.updateCheckPath = "/lookup"        
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
